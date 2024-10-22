@@ -1,0 +1,2484 @@
+                                                                                         
+
+                                                                                         JAVA  PRACTICLE  SLIPS
+
+
+
+Slip  1
+
+Q1. Write a program to accept a number from user and generate multiplication table of a number.
+ 
+       import java.util.Scanner;
+
+	public class MultiplicationTable {
+	    public static void main(String[] args) {
+	        Scanner scanner = new Scanner(System.in);
+	        System.out.print("Enter a number to generate its multiplication table: ");
+	        int number = scanner.nextInt();
+	        System.out.println("Multiplication Table of " + number + ":");
+	        for (int i = 1; i <= 10; i++) {
+	            System.out.println(number + " x " + i + " = " + (number * i));
+	        }
+	        scanner.close();
+	    }
+	}
+
+
+Q2. Construct a linked List containing names of colours: red, blue, yellow and orange. Then extend the program to do the following:
+      i. Display the contents of the List using an Iterator
+      ii. Display the contents of the List in reverse order using a ListIterator
+      iii. Create another list containing pink and green. Insert the elements of this list between blue and yellow. [20 Marks]
+
+         import java.util.LinkedList;
+	import java.util.ListIterator;
+	import java.util.Iterator;
+
+	public class ColorLinkedList {
+	    public static void main(String[] args) {
+	        LinkedList<String> colors = new LinkedList<>();
+	        
+	        colors.add("Red");
+	        colors.add("Blue");
+	        colors.add("Yellow");
+	        colors.add("Orange");
+	        
+	        System.out.println("Contents of the list:");
+	        displayList(colors);
+	        
+	        System.out.println("\nContents of the list in reverse order:");
+	        displayListInReverse(colors);
+	        
+	        LinkedList<String> newColors = new LinkedList<>();
+	        newColors.add("Pink");
+	        newColors.add("Green");
+	        
+	        insertColors(colors, newColors, "Blue", "Yellow");
+	        
+	        System.out.println("\nContents of the list after insertion:");
+	        displayList(colors);
+	    }
+
+	    public static void displayList(LinkedList<String> list) {
+	        Iterator<String> iterator = list.iterator();
+	        while (iterator.hasNext()) {
+	            System.out.println(iterator.next());
+	        }
+	    }
+
+	    public static void displayListInReverse(LinkedList<String> list) {
+	        ListIterator<String> listIterator = list.listIterator(list.size());
+	        while (listIterator.hasPrevious()) {
+	            System.out.println(listIterator.previous());
+	        }
+	    }
+
+	    public static void insertColors(LinkedList<String> mainList, LinkedList<String> newList, String before, String after) {
+	        ListIterator<String> listIterator = mainList.listIterator();
+	        while (listIterator.hasNext()) {
+	            String currentColor = listIterator.next();
+	            if (currentColor.equals(before)) {
+	                listIterator.add(newList.get(0));
+	                listIterator.add(newList.get(1));
+	            }
+	        }
+	    }
+	}
+
+
+
+Q2. Write a JDBC program to display all the details of the Person table in proper format on the screen. Create and insert values in Person table with fields as PID, name, gender, birth_year in PostgreSQL database.
+      
+      Create a person Database
+
+           CREATE TABLE Person (
+    PID SERIAL PRIMARY KEY,
+    name VARCHAR(100),
+    gender VARCHAR(10),
+    birth_year INT
+);
+
+INSERT INTO Person (name, gender, birth_year) VALUES
+('Alice', 'Female', 1990),
+('Bob', 'Male', 1985),
+('Charlie', 'Male', 1992),
+('Diana', 'Female', 1988);
+
+
+
+java program JDBC
+
+      import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
+
+public class DisplayPersonDetails {
+    public static void main(String[] args) {
+        String url = "jdbc:postgresql://localhost:5432/your_database_name"; // Change to your database name
+        String user = "your_username"; // Change to your username
+        String password = "your_password"; // Change to your password
+
+        Connection connection = null;
+        Statement statement = null;
+        ResultSet resultSet = null;
+
+        try {
+            // Establish the connection
+            connection = DriverManager.getConnection(url, user, password);
+            statement = connection.createStatement();
+            String query = "SELECT * FROM Person";
+            resultSet = statement.executeQuery(query);
+
+            // Display the details
+            System.out.printf("%-10s %-20s %-10s %-10s%n", "PID", "Name", "Gender", "Birth Year");
+            System.out.println("-----------------------------------------------------");
+
+            while (resultSet.next()) {
+                int pid = resultSet.getInt("PID");
+                String name = resultSet.getString("name");
+                String gender = resultSet.getString("gender");
+                int birthYear = resultSet.getInt("birth_year");
+                System.out.printf("%-10d %-20s %-10s %-10d%n", pid, name, gender, birthYear);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            // Clean up
+            try {
+                if (resultSet != null) resultSet.close();
+                if (statement != null) statement.close();
+                if (connection != null) connection.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+}
+
+
+
+
+
+Slip  2
+  
+
+Q1. Write a program to accept ‘n’ integers from the user & store them in an Array List collection. Display the elements of Array List. [10 Marks]
+
+        
+        import java.util.ArrayList;
+import java.util.Scanner;
+
+public class IntegerArrayList {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        ArrayList<Integer> numbers = new ArrayList<>();
+
+        System.out.print("Enter the number of integers you want to input: ");
+        int n = scanner.nextInt();
+
+        System.out.println("Please enter " + n + " integers:");
+        for (int i = 0; i < n; i++) {
+            int number = scanner.nextInt();
+            numbers.add(number);
+        }
+
+        System.out.println("The elements in the ArrayList are:");
+        for (Integer num : numbers) {
+            System.out.println(num);
+        }
+
+        scanner.close();
+    }
+}
+
+
+
+
+Q2. Define a class MyNumber having one private integer data member. Write a default constructor initialize it to 0 and another constructor to initialize it to a value. Write methods isNegative, isPositive, isOdd, iseven. Use command line argument to pass a value to the object and perform the above operations. [20 Marks]
+
+   
+       public class MyNumber {
+    private int number;
+
+    public MyNumber() {
+        this.number = 0;
+    }
+
+    public MyNumber(int number) {
+        this.number = number;
+    }
+
+    public boolean isNegative() {
+        return number < 0;
+    }
+
+    public boolean isPositive() {
+        return number > 0;
+    }
+
+    public boolean isOdd() {
+        return number % 2 != 0;
+    }
+
+    public boolean isEven() {
+        return number % 2 == 0;
+    }
+
+    public static void main(String[] args) {
+        MyNumber myNumber;
+
+        if (args.length > 0) {
+            try {
+                int value = Integer.parseInt(args[0]);
+                myNumber = new MyNumber(value);
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid number format. Initializing to 0.");
+                myNumber = new MyNumber();
+            }
+        } else {
+            System.out.println("No argument provided. Initializing to 0.");
+            myNumber = new MyNumber();
+        }
+
+        System.out.println("Number: " + myNumber.number);
+        System.out.println("Is Negative: " + myNumber.isNegative());
+        System.out.println("Is Positive: " + myNumber.isPositive());
+        System.out.println("Is Odd: " + myNumber.isOdd());
+        System.out.println("Is Even: " + myNumber.isEven());
+    }
+}
+
+        OR
+
+Q2. Write a program to accept Doctor Name from the user and check whether it is valid or not. (It should not contain digits and special symbol) If it is not valid then throw user defined Exception - Name is Invalid -- otherwise display the name.
+
+
+           import java.util.Scanner;
+
+class InvalidNameException extends Exception {
+    public InvalidNameException(String message) {
+        super(message);
+    }
+}
+
+public class DoctorNameValidator {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter the doctor's name: ");
+        String doctorName = scanner.nextLine();
+
+        try {
+            validateDoctorName(doctorName);
+            System.out.println("Doctor's Name: " + doctorName);
+        } catch (InvalidNameException e) {
+            System.out.println(e.getMessage());
+        } finally {
+            scanner.close();
+        }
+    }
+
+    public static void validateDoctorName(String name) throws InvalidNameException {
+        if (!name.matches("[a-zA-Z ]+")) {
+            throw new InvalidNameException("Name is Invalid");
+        }
+    }
+}
+
+ 
+
+Slip  3
+
+
+Q1. Write a program to accept the 'n' different numbers from user and store it in array. Also print the sum of elements of the array. [10 Marks]
+
+ 
+       import java.util.Scanner;
+
+	public class SumOfArrayElement {
+	    public static void main(String[] args) {
+	        Scanner scanner = new Scanner(System.in);
+	        
+	        System.out.print("Enter the number of elements: ");
+	        int n = scanner.nextInt();
+	        
+	        int[] numbers = new int[n];
+	        
+	        System.out.println("Enter " + n + " different numbers:");
+	        for (int i = 0; i < n; i++) {
+	            numbers[i] = scanner.nextInt();
+	        }
+	        
+	        int sum = 0;
+	        for (int number : numbers) {
+	            sum += number;
+	        }
+	        
+	        System.out.println("Sum of elements: " + sum);
+	        scanner.close();
+	    }
+	}
+
+       
+
+Q2. Write a program to create class Account (accno, accname, balance). Create an array of 'n' Account objects. Define static method “sortAccount” which sorts the array on the basis of balance. Display account details in sorted order. [20 Marks]
+
+
+import java.util.Scanner;
+import java.util.Arrays;
+import java.util.Comparator;
+
+class Account {
+    private int accno;
+    private String accname;
+    private double balance;
+
+    public Account(int accno, String accname, double balance) {
+        this.accno = accno;
+        this.accname = accname;
+        this.balance = balance;
+    }
+
+    public double getBalance() {
+        return balance;
+    }
+
+    public String toString() {
+        return "Account Number: " + accno + ", Name: " + accname + ", Balance: " + balance;
+    }
+}
+
+public class AccountManager {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        
+        System.out.print("Enter the number of accounts: ");
+        int n = scanner.nextInt();
+        Account[] accounts = new Account[n];
+        
+        for (int i = 0; i < n; i++) {
+            System.out.print("Enter account number: ");
+            int accno = scanner.nextInt();
+            System.out.print("Enter account name: ");
+            String accname = scanner.next();
+            System.out.print("Enter balance: ");
+            double balance = scanner.nextDouble();
+            accounts[i] = new Account(accno, accname, balance);
+        }
+        
+        sortAccount(accounts);
+        
+        System.out.println("Accounts sorted by balance:");
+        for (Account account : accounts) {
+            System.out.println(account);
+        }
+        
+        scanner.close();
+    }
+
+    public static void sortAccount(Account[] accounts) {
+        Arrays.sort(accounts, Comparator.comparingDouble(Account::getBalance));
+    }
+}
+
+
+        OR
+
+Q2. Write a program to copy the contents from one file into another file in upper case.
+
+
+        import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+
+public class FileCopyToUpperCase {
+    public static void main(String[] args) {
+        String sourceFile = "D:/pj/Pratiksha.txt"; // Change to your source file path
+        String destinationFile = "D:/pj/destination.txt"; // Change to your destination file path
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(sourceFile));
+             BufferedWriter writer = new BufferedWriter(new FileWriter(destinationFile))) {
+            
+            String line;
+            while ((line = reader.readLine()) != null) {
+                writer.write(line.toUpperCase());
+                writer.newLine();
+            }
+            System.out.println("File copied and converted to uppercase successfully.");
+        } catch (IOException e) {
+            System.out.println("An error occurred: " + e.getMessage());
+        }
+    }
+}
+
+
+
+Slip  4
+
+
+Q1. Write a program to accept the user name and greets the user by name. Before displaying the user's name, convert it to upper case letters. For example, if the user's name is Raj, then display greet message as "Hello, RAJ, nice to meet you!". [10 Marks]
+
+ 
+     
+import java.util.Scanner;
+
+public class GreetUsers {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        
+        System.out.print("Enter your name: ");
+        String userName = scanner.nextLine();
+        
+        String upperCaseName = userName.toUpperCase();
+        
+        System.out.println("Hello, " + upperCaseName + ", nice to meet you!");
+        
+        scanner.close();
+    }
+}
+            
+
+
+Q2. Write a program which define class Product with data member as id, name and price. Store the information of 5 products and Display the name of product having minimum price (Use array of object). [20 Marks]
+
+
+     import java.util.Scanner;
+
+class Product {
+    private int id;
+    private String name;
+    private double price;
+
+    public Product(int id, String name, double price) {
+        this.id = id;
+        this.name = name;
+        this.price = price;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public String getName() {
+        return name;
+    }
+}
+
+public class ProductManager {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        Product[] products = new Product[5];
+
+        for (int i = 0; i < 5; i++) {
+            System.out.print("Enter product ID: ");
+            int id = scanner.nextInt();
+            scanner.nextLine(); // Consume newline
+            System.out.print("Enter product name: ");
+            String name = scanner.nextLine();
+            System.out.print("Enter product price: ");
+            double price = scanner.nextDouble();
+            products[i] = new Product(id, name, price);
+        }
+
+        Product minPriceProduct = products[0];
+        for (int i = 1; i < products.length; i++) {
+            if (products[i].getPrice() < minPriceProduct.getPrice()) {
+                minPriceProduct = products[i];
+            }
+        }
+
+        System.out.println("Product with minimum price: " + minPriceProduct.getName());
+        
+        scanner.close();
+    }
+}
+
+o/p
+Enter product ID: 101
+Enter product name: Apple
+Enter product price: 1.50
+Enter product ID: 102
+Enter product name: Banana
+Enter product price: 0.75
+Enter product ID: 103
+Enter product name: Cherry
+Enter product price: 2.00
+Enter product ID: 104
+Enter product name: Date
+Enter product price: 1.20
+Enter product ID: 105
+Enter product name: Elderberry
+Enter product price: 1.80
+
+Product with minimum price: Banana
+
+
+OR
+
+Q2. Write a program to design following GUI using swing. On click of Show button display the selected Programming language on screen using label.
+
+
+        import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+public class ProgrammingLanguageselector {
+    public static void main(String[] args) {
+        JFrame frame = new JFrame("Programming Language Selector");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(300, 200);
+        frame.setLayout(new FlowLayout());
+
+        String[] languages = {"Java", "Python", "C++", "JavaScript", "Ruby"};
+        JComboBox<String> languageComboBox = new JComboBox<>(languages);
+        JButton showButton = new JButton("Show");
+        JLabel resultLabel = new JLabel("Selected Language: ");
+
+        showButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String selectedLanguage = (String) languageComboBox.getSelectedItem();
+                resultLabel.setText("Selected Language: " + selectedLanguage);
+            }
+        });
+
+        frame.add(languageComboBox);
+        frame.add(showButton);
+        frame.add(resultLabel);
+
+        frame.setVisible(true);
+    }
+}
+
+***** 
+this program  is correct but don't run on eclips  run on cmd 
+ 
+. Save the code in a file named ProgrammingLanguageselector.java.
+. Open your command prompt or terminal and navigate to the directory where the file is located.
+Compile the program:
+javac ProgrammingLanguageSelector.java
+Run the program:
+java ProgrammingLanguageSelector
+
+*****
+
+
+Slip  5
+
+
+Q1. Write a program to accept a number from the user, if number is zero then throw user defined exception ―Number is 0, otherwise display factorial of a number. [10 Marks]
+
+
+       import java.util.Scanner;
+
+class ZeroException extends Exception {
+    public ZeroException(String message) {
+        super(message);
+    }
+}
+
+public class FactorialCalculator {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter a number: ");
+        int number = scanner.nextInt();
+
+        try {
+            if (number == 0) {
+                throw new ZeroException("Number is 0");
+            } else {
+                long factorial = calculateFactorial(number);
+                System.out.println("Factorial of " + number + " is " + factorial);
+            }
+        } catch (ZeroException e) {
+            System.out.println(e.getMessage());
+        } finally {
+            scanner.close();
+        }
+    }
+
+    private static long calculateFactorial(int num) {
+        long result = 1;
+        for (int i = 1; i <= num; i++) {
+            result *= i;
+        }
+        return result;
+    }
+}
+
+       
+
+Q2. Define a “Point” class having members – x,y (coordinates). Define default constructor and parameterized constructors. Define subclass “ColorPoint” with member as color. Write display method to display the details of Point. [20 Marks]
+
+class Point {
+    protected int x;
+    protected int y;
+
+    public Point() {
+        this.x = 0;
+        this.y = 0;
+    }
+
+    public Point(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
+
+    public void display() {
+        System.out.println("Point coordinates: (" + x + ", " + y + ")");
+    }
+}
+
+class ColorPoint extends Point {
+    private String color;
+
+    public ColorPoint(int x, int y, String color) {
+        super(x, y);
+        this.color = color;
+    }
+
+    public void display() {
+        super.display();
+        System.out.println("Color: " + color);
+    }
+}
+
+public class Main1 {
+    public static void main(String[] args) {
+        Point point = new Point(3, 4);
+        point.display();
+
+        ColorPoint colorPoint = new ColorPoint(5, 6, "Red");
+       colorPoint.display();
+    }
+}
+
+       
+  OR
+
+Q2. Write a JDBC program to insert the records into the table Employee (ID, name, salary) using PreparedStatement interface. Accept details of Employees from user. [20 Marks]
+
+
+   CREATE TABLE Employee (
+    ID INT PRIMARY KEY,
+    name VARCHAR(100),
+    salary DECIMAL
+);
+
+
+
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.util.Scanner;
+
+public class EmployeeInsert {
+    private static final String DB_URL = "jdbc:postgresql://localhost:5432/your_database_name";
+    private static final String USER = "your_username";
+    private static final String PASSWORD = "your_password";
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        
+        System.out.print("Enter Employee ID: ");
+        int id = scanner.nextInt();
+        scanner.nextLine(); // Consume newline
+        System.out.print("Enter Employee Name: ");
+        String name = scanner.nextLine();
+        System.out.print("Enter Employee Salary: ");
+        double salary = scanner.nextDouble();
+
+        String insertSQL = "INSERT INTO Employee (ID, name, salary) VALUES (?, ?, ?)";
+
+        try (Connection connection = DriverManager.getConnection(DB_URL, USER, PASSWORD);
+             PreparedStatement preparedStatement = connection.prepareStatement(insertSQL)) {
+
+            preparedStatement.setInt(1, id);
+            preparedStatement.setString(2, name);
+            preparedStatement.setDouble(3, salary);
+            
+            int rowsAffected = preparedStatement.executeUpdate();
+            System.out.println(rowsAffected + " record(s) inserted.");
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            scanner.close();
+        }
+    }
+}
+
+
+
+
+Slip  6
+
+
+Q1. Accept 'n' integers from the user and store them in a collection. Display them in the sorted order. The collection should not accept duplicate elements. (Use a suitable collection). Search for a particular element using predefined search method in the Collection framework. [10 Marks]
+
+
+import java.util.Collection;
+import java.util.Scanner;
+import java.util.Set;
+import java.util.TreeSet;
+
+public class UniqueIntegerCollection {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        Set<Integer> integerSet = new TreeSet<>();
+
+        System.out.print("Enter the number of integers you want to input: ");
+        int n = scanner.nextInt();
+
+        System.out.println("Enter " + n + " integers:");
+
+        for (int i = 0; i < n; i++) {
+            int number = scanner.nextInt();
+            integerSet.add(number);
+        }
+
+        System.out.println("Unique integers in sorted order: " + integerSet);
+
+        System.out.print("Enter an integer to search: ");
+        int searchElement = scanner.nextInt();
+
+        if (integerSet.contains(searchElement)) {
+            System.out.println(searchElement + " is present in the collection.");
+        } else {
+            System.out.println(searchElement + " is not present in the collection.");
+        }
+
+        scanner.close();
+    }
+}
+
+
+
+Q2. Write a program which define class Employee with data member as id, name and salary Store the information of 'n' employees and Display the name of employee having maximum salary (Use array of object). [20 Marks]
+
+
+import java.util.Scanner;
+
+class Employee {
+    private int id;
+    private String name;
+    private double salary;
+
+    public Employee(int id, String name, double salary) {
+        this.id = id;
+        this.name = name;
+        this.salary = salary;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public double getSalary() {
+        return salary;
+    }
+}
+
+public class EmployeeManager1 {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        
+        System.out.print("Enter the number of employees: ");
+        int n = scanner.nextInt();
+        Employee[] employees = new Employee[n];
+
+        for (int i = 0; i < n; i++) {
+            System.out.println("Enter details for employee " + (i + 1) + ":");
+            System.out.print("ID: ");
+            int id = scanner.nextInt();
+            scanner.nextLine(); // Consume newline
+            System.out.print("Name: ");
+            String name = scanner.nextLine();
+            System.out.print("Salary: ");
+            double salary = scanner.nextDouble();
+            
+            employees[i] = new Employee(id, name, salary);
+        }
+
+        Employee maxSalaryEmployee = employees[0];
+
+        for (Employee employee : employees) {
+            if (employee.getSalary() > maxSalaryEmployee.getSalary()) {
+                maxSalaryEmployee = employee;
+            }
+        }
+
+        System.out.println("Employee with maximum salary: " + maxSalaryEmployee.getName());
+
+        scanner.close();
+    }
+}
+        
+
+OR
+
+Q2. Write a program to create the following GUI using Swing components. [20 Marks]
+       calculator
+ 
+ import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+public class Calculator {
+    private JFrame frame;
+    private JTextField textField;
+    private double num1, num2, result;
+    private String operator;
+
+    public Calculator() {
+        frame = new JFrame("Calculator");
+        textField = new JTextField();
+        textField.setEditable(false);
+        
+        JPanel panel = new JPanel();
+        panel.setLayout(new GridLayout(4, 4, 10, 10));
+
+        String[] buttonLabels = {
+            "7", "8", "9", "/",
+            "4", "5", "6", "*",
+            "1", "2", "3", "-",
+            "0", "C", "=", "+"
+        };
+
+        for (String label : buttonLabels) {
+            JButton button = new JButton(label);
+            button.addActionListener(new ButtonClickListener());
+            panel.add(button);
+        }
+
+        frame.setLayout(new BorderLayout());
+        frame.add(textField, BorderLayout.NORTH);
+        frame.add(panel, BorderLayout.CENTER);
+        
+        frame.setSize(400, 400);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setVisible(true);
+    }
+
+    private class ButtonClickListener implements ActionListener {
+        public void actionPerformed(ActionEvent e) {
+            String command = e.getActionCommand();
+
+            if (command.charAt(0) >= '0' && command.charAt(0) <= '9') {
+                textField.setText(textField.getText() + command);
+            } else if (command.equals("C")) {
+                textField.setText("");
+                num1 = num2 = result = 0;
+                operator = "";
+            } else if (command.equals("=")) {
+                num2 = Double.parseDouble(textField.getText());
+                switch (operator) {
+                    case "+":
+                        result = num1 + num2;
+                        break;
+                    case "-":
+                        result = num1 - num2;
+                        break;
+                    case "*":
+                        result = num1 * num2;
+                        break;
+                    case "/":
+                        if (num2 != 0) {
+                            result = num1 / num2;
+                        } else {
+                            textField.setText("Error");
+                            return;
+                        }
+                        break;
+                }
+                textField.setText(String.valueOf(result));
+                operator = "";
+            } else {
+                if (!operator.isEmpty()) {
+                    return;
+                }
+                operator = command;
+                num1 = Double.parseDouble(textField.getText());
+                textField.setText("");
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+        new Calculator();
+    }
+}
+
+
+
+
+Slip   7
+
+
+Q1. Create a Hash table containing Employee name and Salary. Display the details of the hash table. [10 Marks]
+
+      import java.util.HashMap;
+import java.util.Map;
+
+public class EmployeeSalaryHashTable {
+    public static void main(String[] args) {
+        HashMap<String, Integer> employeeSalaries = new HashMap<>();
+
+        employeeSalaries.put("Alice Johnson", 75000);
+        employeeSalaries.put("Bob Smith", 60000);
+        employeeSalaries.put("Charlie Brown", 50000);
+        employeeSalaries.put("Diana Prince", 80000);
+        employeeSalaries.put("Ethan Hunt", 70000);
+
+        System.out.println("Employee Name\tSalary");
+        System.out.println("---------------------------");
+
+        for (Map.Entry<String, Integer> entry : employeeSalaries.entrySet()) {
+            System.out.printf("%s\t%d%n", entry.getKey(), entry.getValue());
+        }
+    }
+}
+       
+                   
+
+
+Q2. Define a class student having rollno, name and percentage. Define Default and parameterized constructor. Accept the 5 student details and display it. (Use this keyword).
+[20 Marks]
+
+
+import java.util.Scanner;
+
+class Student {
+    int rollno;
+    String name;
+    double percentage;
+
+    Student() {
+        rollno = 0;
+        name = "";
+        percentage = 0.0;
+    }
+
+    Student(int rollno, String name, double percentage) {
+        this.rollno = rollno;
+        this.name = name;
+        this.percentage = percentage;
+    }
+
+    void display() {
+        System.out.println("Roll No: " + rollno + ", Name: " + name + ", Percentage: " + percentage);
+    }
+}
+
+public class StudentDetails {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        Student[] students = new Student[5];
+
+        for (int i = 0; i < 5; i++) {
+            System.out.print("Enter roll number: ");
+            int rollno = scanner.nextInt();
+            scanner.nextLine();
+            System.out.print("Enter name: ");
+            String name = scanner.nextLine();
+            System.out.print("Enter percentage: ");
+            double percentage = scanner.nextDouble();
+            students[i] = new Student(rollno, name, percentage);
+        }
+
+        System.out.println("Student Details:");
+        for (Student student : students) {
+            student.display();
+        }
+    }
+}
+
+
+
+
+OR
+Q2. Write a program to design the following GUI using Swing components. On click of submit button check whether user has entered all the details or not. If any details are missing then display appropriate message on screen using label.
+Customer  Details
+
+
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+public class CustomerAccountDetailsGUI {
+    private JFrame frame;
+    private JTextField accountNumberField, nameField, balanceField;
+    private JButton submitButton;
+    private JLabel messageLabel;
+
+    public CustomerAccountDetailsGUI() {
+        frame = new JFrame("Customer Account Details");
+        frame.setSize(300, 250);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setLayout(null);
+
+        JLabel accountNumberLabel = new JLabel("Account Number:");
+        accountNumberLabel.setBounds(20, 20, 120, 25);
+        frame.add(accountNumberLabel);
+
+        accountNumberField = new JTextField();
+        accountNumberField.setBounds(150, 20, 100, 25);
+        frame.add(accountNumberField);
+
+        JLabel nameLabel = new JLabel("Name:");
+        nameLabel.setBounds(20, 60, 100, 25);
+        frame.add(nameLabel);
+
+        nameField = new JTextField();
+        nameField.setBounds(150, 60, 100, 25);
+        frame.add(nameField);
+
+        JLabel balanceLabel = new JLabel("Balance:");
+        balanceLabel.setBounds(20, 100, 100, 25);
+        frame.add(balanceLabel);
+
+        balanceField = new JTextField();
+        balanceField.setBounds(150, 100, 100, 25);
+        frame.add(balanceField);
+
+        submitButton = new JButton("Submit");
+        submitButton.setBounds(20, 140, 230, 25);
+        frame.add(submitButton);
+
+        messageLabel = new JLabel("");
+        messageLabel.setBounds(20, 170, 250, 25);
+        frame.add(messageLabel);
+
+        submitButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                checkDetails();
+            }
+        });
+
+        frame.setVisible(true);
+    }
+
+    private void checkDetails() {
+        String accountNumber = accountNumberField.getText();
+        String name = nameField.getText();
+        String balance = balanceField.getText();
+
+        if (accountNumber.isEmpty() || name.isEmpty() || balance.isEmpty()) {
+            messageLabel.setText("Please fill in all details.");
+        } else {
+            messageLabel.setText("Details submitted successfully!");
+        }
+    }
+
+    public static void main(String[] args) {
+        new CustomerAccountDetailsGUI();
+    }
+}
+
+
+
+
+Slip  8
+
+
+
+
+Q1. Write a program to reverse a number. Accept number using command line argument.
+ 
+     
+        public class ReverseNumber {
+    public static void main(String[] args) {
+        if (args.length == 0) {
+            System.out.println("Please provide a number as a command line argument.");
+            return;
+        }
+
+        try {
+            int number = Integer.parseInt(args[0]);
+            int reversedNumber = 0;
+
+            while (number != 0) {
+                int digit = number % 10;
+                reversedNumber = reversedNumber * 10 + digit;
+                number /= 10;
+            }
+
+            System.out.println("Reversed Number: " + reversedNumber);
+        } catch (NumberFormatException e) {
+            System.out.println("Invalid input. Please provide a valid integer number.");
+        }
+    }
+}
+ program run on cmd
+      
+How to Run the Program
+Save the Code: Save the code in a file named ReverseNumber.java.
+
+Open Terminal/Command Prompt: Navigate to the directory where you saved the file.
+
+javac ReverseNumber.java
+Run the Program with a Command Line Argument:
+java ReverseNumber 12345
+
+
+
+Q2. Define a class MyDate (day, month, year) with methods to accept and display MyDate object. Accept date as dd, mm, yyyy. Throw user defined exception “InvalidDateException” if the date is invalid. Examples of invalid dates : 12 15 2015, 31 6 1990, 29 2 2001
+
+import java.util.Scanner;
+
+class InvalidDateException extends Exception {
+    public InvalidDateException(String message) {
+        super(message);
+    }
+}
+
+class MyDate {
+    private int day;
+    private int month;
+    private int year;
+
+    public void acceptDate() throws InvalidDateException {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter date (dd mm yyyy): ");
+        day = scanner.nextInt();
+        month = scanner.nextInt();
+        year = scanner.nextInt();
+        validateDate(day, month, year);
+    }
+
+    public void displayDate() {
+        System.out.println("Date: " + String.format("%02d/%02d/%04d", day, month, year));
+    }
+
+    private void validateDate(int day, int month, int year) throws InvalidDateException {
+        if (month < 1 || month > 12) {
+            throw new InvalidDateException("Invalid month: " + month);
+        }
+
+        int maxDays;
+        switch (month) {
+            case 2:
+                maxDays = (isLeapYear(year)) ? 29 : 28;
+                break;
+            case 4: case 6: case 9: case 11:
+                maxDays = 30;
+                break;
+            default:
+                maxDays = 31;
+        }
+
+        if (day < 1 || day > maxDays) {
+            throw new InvalidDateException("Invalid date: " + day + " for month: " + month);
+        }
+    }
+
+    private boolean isLeapYear(int year) {
+        return (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0);
+    }
+}
+
+public class Main2 {
+    public static void main(String[] args) {
+        MyDate date = new MyDate();
+        try {
+            date.acceptDate();
+            date.displayDate();
+        } catch (InvalidDateException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+}
+
+
+OR
+
+Q2. Create and insert values to Person table (PID, name, gender, birth_year) in postgreSQL database. Write a JDBC program to display information about the ResultSet like number of columns available in the ResultSet and SQL type of each column using ResultSetMetaData
+
+
+         
+    CREATE TABLE Person (
+    PID SERIAL PRIMARY KEY,
+    name VARCHAR(100),
+    gender VARCHAR(10),
+    birth_year INT
+);
+
+
+
+INSERT INTO Person (name, gender, birth_year) VALUES
+('Alice', 'Female', 1990),
+('Bob', 'Male', 1985),
+('Charlie', 'Male', 2000),
+('Diana', 'Female', 1992);
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+import java.sql.Statement;
+
+public class PersonInfo {
+    public static void main(String[] args) {
+        String url = "jdbc:postgresql://localhost:5432/your_database_name"; // Replace with your database name
+        String user = "your_username"; // Replace with your database username
+        String password = "your_password"; // Replace with your database password
+
+        try (Connection conn = DriverManager.getConnection(url, user, password);
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery("SELECT * FROM Person")) {
+
+            ResultSetMetaData rsmd = rs.getMetaData();
+            int columnCount = rsmd.getColumnCount();
+
+            System.out.println("Number of columns: " + columnCount);
+            for (int i = 1; i <= columnCount; i++) {
+                String columnName = rsmd.getColumnName(i);
+                String columnType = rsmd.getColumnTypeName(i);
+                System.out.println("Column " + i + ": " + columnName + " (Type: " + columnType + ")");
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+}
+
+
+
+
+
+Slip  9
+
+
+
+Q1. Write a program to accept a number from user. Check whether number is perfect or not. Use BufferedReader class for accepting input from user. [10 Marks]
+
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+
+public class PerfectNumberChecker {
+    public static void main(String[] args) {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+        try {
+            System.out.print("Enter a number: ");
+            int number = Integer.parseInt(reader.readLine());
+            if (isPerfect(number)) {
+                System.out.println(number + " is a perfect number.");
+            } else {
+                System.out.println(number + " is not a perfect number.");
+            }
+        } catch (IOException e) {
+            System.out.println("An error occurred while reading input.");
+        } catch (NumberFormatException e) {
+            System.out.println("Invalid input. Please enter a valid integer.");
+        }
+    }
+
+    private static boolean isPerfect(int number) {
+        int sum = 0;
+        for (int i = 1; i <= number / 2; i++) {
+            if (number % i == 0) {
+                sum += i;
+            }
+        }
+        return sum == number;
+    }
+}
+
+
+
+Q2. Define a “Point” class having members – x,y(coordinates). Define default constructor and parameterized constructors. Define subclass “Point3D” with member as z (coordinate). Write display method to show the details of Point. [20 Marks]
+
+
+class Point {
+    protected int x;
+    protected int y;
+
+    public Point() {
+        this.x = 0;
+        this.y = 0;
+    }
+
+    public Point(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
+
+    public void display() {
+        System.out.println("Point coordinates: (" + x + ", " + y + ")");
+    }
+}
+
+class Point3D extends Point {
+    private int z;
+
+    public Point3D() {
+        super();
+        this.z = 0;
+    }
+
+    public Point3D(int x, int y, int z) {
+        super(x, y);
+        this.z = z;
+    }
+
+    @Override
+    public void display() {
+        System.out.println("3D Point coordinates: (" + x + ", " + y + ", " + z + ")");
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Point point2D = new Point();
+        Point3D point3D = new Point3D(1, 2, 3);
+
+        point2D.display();
+        point3D.display();
+    }
+}
+
+
+
+
+OR
+
+
+Q2. Write a program that displays the number of characters, lines and words of a file.
+
+
+
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+
+public class FileStatistics {
+    public static void main(String[] args) {
+        if (args.length != 1) {
+            System.out.println("Usage: java FileStatistics <file_path>");
+            return;
+        }
+
+        String filePath = args[0];
+        int characterCount = 0;
+        int lineCount = 0;
+        int wordCount = 0;
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                lineCount++;
+                characterCount += line.length();
+                wordCount += line.split("\\s+").length;
+            }
+        } catch (IOException e) {
+            System.out.println("An error occurred while reading the file: " + e.getMessage());
+        }
+
+        System.out.println("Number of characters: " + characterCount);
+        System.out.println("Number of lines: " + lineCount);
+        System.out.println("Number of words: " + wordCount);
+    }
+}
+
+
+
+
+Slip  10
+
+
+Q1. Write a program to accept a number from user. Check whether number is prime or not.
+
+import java.util.Scanner;
+
+public class PrimeNumberChecker {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter a number: ");
+        int number = scanner.nextInt();
+
+        if (isPrime(number)) {
+            System.out.println(number + " is a prime number.");
+        } else {
+            System.out.println(number + " is not a prime number.");
+        }
+
+        scanner.close();
+    }
+
+    private static boolean isPrime(int number) {
+        if (number <= 1) {
+            return false;
+        }
+        for (int i = 2; i <= Math.sqrt(number); i++) {
+            if (number % i == 0) {
+                return false;
+            }
+        }
+        return true;
+    }
+}
+
+
+
+
+Q2. Create a package “utility”. Define a class CapitalString under “utility” package which will contain a method to return String with first letter capital. Create a Person class (members – name, city) outside the package. Display the person name with first letter as capital by making use of CapitalString. 
+
+
+
+
+OR
+Q2. Define a class SavingAccount (acno, name, balance). Define appropriate operations as, withdraw(), deposit(), and viewbalance(). The minimum balance must be 500. Create an object and perform operation. Raise user defined ―InsufficientFundException when balance is not sufficient for withdraw operation.
+
+
+// InsufficientFundException.java
+public class InsufficientFundException extends Exception {
+    public InsufficientFundException(String message) {
+        super(message);
+    }
+}
+
+
+
+create the SavingAccount class:
+
+public class SavingAccount {
+    private String acno;
+    private String name;
+    private double balance;
+
+    public SavingAccount(String acno, String name, double initialBalance) {
+        this.acno = acno;
+        this.name = name;
+        this.balance = initialBalance >= 500 ? initialBalance : 500; // Ensure minimum balance
+    }
+
+    public void withdraw(double amount) throws InsufficientFundException {
+        if (balance - amount < 500) {
+            throw new InsufficientFundException("Insufficient funds. Minimum balance must be 500.");
+        }
+        balance -= amount;
+        System.out.println("Withdrawn: " + amount);
+    }
+
+    public void deposit(double amount) {
+        balance += amount;
+        System.out.println("Deposited: " + amount);
+    }
+
+    public void viewBalance() {
+        System.out.println("Current balance: " + balance);
+    }
+}
+
+
+create a main class
+
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        SavingAccount account = new SavingAccount("12345", "John Doe", 1000);
+                boolean running = true;
+        while (running) {
+            System.out.println("\nSelect operation:");
+            System.out.println("1. View Balance");
+            System.out.println("2. Deposit");
+            System.out.println("3. Withdraw");
+            System.out.println("4. Exit");
+            int choice = scanner.nextInt();
+
+            switch (choice) {
+                case 1:
+                    account.viewBalance();
+                    break;
+                case 2:
+                    System.out.print("Enter amount to deposit: ");
+                    double depositAmount = scanner.nextDouble();
+                    account.deposit(depositAmount);
+                    break;
+                case 3:
+                    System.out.print("Enter amount to withdraw: ");
+                    double withdrawAmount = scanner.nextDouble();
+                    try {
+                        account.withdraw(withdrawAmount);
+                    } catch (InsufficientFundException e) {
+                        System.out.println(e.getMessage());
+                    }
+                    break;
+                case 4:
+                    running = false;
+                    break;
+                default:
+                    System.out.println("Invalid choice. Please try again.");
+            }
+        }
+
+        scanner.close();
+    }
+}
+
+
+
+slip 11
+
+
+
+Q1. Write a program create class as MyDate with dd,mm,yy as data members. Write parameterized constructor. Display the date in dd-mm-yy format. (Use this keyword)
+
+
+public class MyDate1 {
+    private int dd;
+    private int mm;
+    private int yy;
+
+    public MyDate1(int dd, int mm, int yy) {
+        this.dd = dd;
+        this.mm = mm;
+        this.yy = yy;
+    }
+
+    public void displayDate() {
+        System.out.printf("%02d-%02d-%02d\n", this.dd, this.mm, this.yy);
+    }
+
+    public static void main(String[] args) {
+        MyDate1 date = new MyDate1(5, 10, 2023);
+        date.displayDate();
+    }
+}
+
+
+
+
+Q2. Create an abstract class Shape with methods area & volume. Derive a class Sphere (radius). Calculate and display area and volume. 
+
+      
+package src;
+
+abstract class Shape {
+    abstract double area();
+    abstract double volume();
+}
+
+class Sphere extends Shape {
+    private double radius;
+
+    public Sphere(double radius) {
+        this.radius = radius;
+    }
+
+    @Override
+    double area() {
+        return 4 * Math.PI * radius * radius;
+    }
+
+    @Override
+    double volume() {
+        return (4.0 / 3.0) * Math.PI * radius * radius * radius;
+    }
+
+    public void display() {
+        System.out.printf("Sphere with radius: %.2f\n", radius);
+        System.out.printf("Area: %.2f\n", area());
+        System.out.printf("Volume: %.2f\n", volume());
+    }
+}
+
+public class Main11 {
+    public static void main(String[] args) {
+        Sphere sphere = new Sphere(5.0);
+        sphere.display();
+    }
+}
+
+
+Q2. Write a program to accept details of 'n' customers (c_id, cname, address, mobile_no) from user and store it in a file using DataOutputStream class.
+
+
+package src;
+
+import java.io.*;
+import java.util.Scanner;
+
+class Customer {
+    private int cId;
+    private String cName;
+    private String address;
+    private String mobileNo;
+
+    public Customer(int cId, String cName, String address, String mobileNo) {
+        this.cId = cId;
+        this.cName = cName;
+        this.address = address;
+        this.mobileNo = mobileNo;
+    }
+
+    public void writeData(DataOutputStream dos) throws IOException {
+        dos.writeInt(cId);
+        dos.writeUTF(cName);
+        dos.writeUTF(address);
+        dos.writeUTF(mobileNo);
+    }
+}
+
+public class CustomerDetails {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter the number of customers: ");
+        int n = scanner.nextInt();
+        scanner.nextLine(); // Consume newline
+
+        try (DataOutputStream dos = new DataOutputStream(new FileOutputStream("customers.dat"))) {
+            for (int i = 0; i < n; i++) {
+                System.out.print("Enter Customer ID: ");
+                int cId = scanner.nextInt();
+                scanner.nextLine(); // Consume newline
+
+                System.out.print("Enter Customer Name: ");
+                String cName = scanner.nextLine();
+
+                System.out.print("Enter Address: ");
+                String address = scanner.nextLine();
+
+                System.out.print("Enter Mobile Number: ");
+                String mobileNo = scanner.nextLine();
+
+                Customer customer = new Customer(cId, cName, address, mobileNo);
+                customer.writeData(dos);
+            }
+            System.out.println("Customer details saved to file.");
+        } catch (IOException e) {
+            System.out.println("An error occurred while writing to the file: " + e.getMessage());
+        }
+
+        scanner.close();
+    }
+}
+
+
+
+
+Slip 12
+
+
+
+Q1. Create a package named “Series” having a class to print series of Square of numbers. Write a program to generate “n” terms series. [10 Marks]
+
+        
+import java.util.Scanner;
+
+public class SquareSeries {
+    public void generateSeries(int n) {
+        for (int i = 1; i <= n; i++) {
+            System.out.print(i * i + " ");
+        }
+        System.out.println();
+    }
+}
+
+//create a main class
+
+import Series.SquareSeries;
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter the number of terms (n): ");
+        int n = scanner.nextInt();
+
+        SquareSeries series = new SquareSeries();
+        series.generateSeries(n);
+        
+        scanner.close();
+    }
+}
+
+
+
+Q2. Create an abstract class Shape with methods area & volume. Derive a class Cylinder (radius, height). Calculate area and volume. [20 Marks]
+
+
+abstract class Shape {
+    // Abstract methods
+    abstract double area();
+    abstract double volume();
+}
+
+
+
+
+class Cylinder extends Shape {
+    private double radius;
+    private double height;
+
+    // Constructor
+    public Cylinder(double radius, double height) {
+        this.radius = radius;
+        this.height = height;
+    }
+
+    // Implementing the area method
+    @Override
+    double area() {
+        return 2 * Math.PI * radius * (radius + height); // Surface area
+    }
+
+    // Implementing the volume method
+    @Override
+    double volume() {
+        return Math.PI * radius * radius * height; // Volume
+    }
+}
+
+
+
+
+public class Main {
+    public static void main(String[] args) {
+        Cylinder cylinder = new Cylinder(5, 10); // Example: radius = 5, height = 10
+        
+        System.out.println("Surface Area of Cylinder: " + cylinder.area());
+        System.out.println("Volume of Cylinder: " + cylinder.volume());
+    }
+}
+
+       
+
+
+OR
+Q2. Write a program to design a following GUI. Use appropriate Layout and Components. On click of login check whether Username and Password is “admin” or not.
+
+    
+
+
+
+
+
+Slip  13
+
+
+Q1. Construct a Linked List having names of Fruits: Apple, Banana, Guava and Orange. Display the contents of the List using an Iterator. [10 Marks]
+
+   import java.util.LinkedList;
+import java.util.Iterator;
+
+public class FruitLinkedList {
+    public static void main(String[] args) {
+        LinkedList<String> fruits = new LinkedList<>();
+
+        // Adding fruits to the linked list
+        fruits.add("Apple");
+        fruits.add("Banana");
+        fruits.add("Guava");
+        fruits.add("Orange");
+
+        // Displaying the contents of the list using an iterator
+        Iterator<String> iterator = fruits.iterator();
+        
+        System.out.println("Fruits in the linked list:");
+        while (iterator.hasNext()) {
+            System.out.println(iterator.next());
+        }
+    }
+}
+
+
+
+Q2. Define an interface “Operation” which has methods area(),volume(). Define a constant PI having value 3.142. Create a class circle (member – radius) which implements this interface. Calculate and display the area and volume. [20 Marks]
+
+interface Operation {
+    double PI = 3.142;
+    double area();
+    double volume();
+}
+
+class Circle implements Operation {
+    private double radius;
+
+    public Circle(double radius) {
+        this.radius = radius;
+    }
+
+    @Override
+    public double area() {
+        return PI * radius * radius;
+    }
+
+    @Override
+    public double volume() {
+        return 0; // Volume is not applicable for a 2D shape like a circle
+    }
+
+    public void display() {
+        System.out.printf("Circle with radius: %.2f\n", radius);
+        System.out.printf("Area: %.2f\n", area());
+        System.out.printf("Volume: %.2f (not applicable for Circle)\n", volume());
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Circle circle = new Circle(5.0);
+        circle.display();
+    }
+}
+
+
+
+OR
+Q2. Write a class Student with attributes roll no, name, age and course. Initialize values through parameterized constructor. If age of student is not in between 15 and 21 then generate user- defined exception ―Age Not Within The Range.
+
+
+
+
+
+Slip  14
+
+
+
+
+Q1. Write a program to create JDBC connection. On successful connection with database display appropriate message to user. [10 Marks]
+
+
+
+Q2. Define an interface “Operation” which has methods area(),volume(). Define a constant PI having a value 3.142. Create a class cylinder (members – radius, height) which implements this interface. Calculate and display the area and volume. [20 Marks]
+
+       interface Operation {
+    double PI = 3.142;
+
+    double area();
+    double volume();
+}
+
+class Cylinder implements Operation {
+    private double radius;
+    private double height;
+
+    public Cylinder(double radius, double height) {
+        this.radius = radius;
+        this.height = height;
+    }
+
+    @Override
+    public double area() {
+        return 2 * PI * radius * (radius + height);
+    }
+
+    @Override
+    public double volume() {
+        return PI * radius * radius * height;
+    }
+
+    public void display() {
+        System.out.printf("Radius: %.2f, Height: %.2f\n", radius, height);
+        System.out.printf("Surface Area: %.2f\n", area());
+        System.out.printf("Volume: %.2f\n", volume());
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Cylinder cylinder = new Cylinder(5.0, 10.0);
+        cylinder.display();
+    }
+}
+
+
+
+
+OR
+Q2. Write a class Student with attributes roll no, name, age and course. Initialize values through parameterized constructor. If student's roll no of is not in between 13001 to 13080 then generate user- defined exception ―Rollno is Not Within The Range.
+
+
+
+
+
+Slip  15
+
+
+Q1. Construct a Linked List having names of Fruits: Apple, Banana, Guava and Orange. Display the contents of the List in reverse order using an appropriate interface. [10 Marks]
+           import java.util.LinkedList;
+import java.util.ListIterator;
+
+interface Reversible {
+    void displayInReverse();
+}
+
+class FruitList implements Reversible {
+    private LinkedList<String> fruits;
+
+    public FruitList() {
+        fruits = new LinkedList<>();
+        fruits.add("Apple");
+        fruits.add("Banana");
+        fruits.add("Guava");
+        fruits.add("Orange");
+    }
+
+    @Override
+    public void displayInReverse() {
+        ListIterator<String> iterator = fruits.listIterator(fruits.size());
+        while (iterator.hasPrevious()) {
+            System.out.println(iterator.previous());
+        }
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        FruitList fruitList = new FruitList();
+        System.out.println("Fruits in reverse order:");
+        fruitList.displayInReverse();
+    }
+}
+
+
+
+Q2. Write a program to create a super class Employee (members – name, salary). Derive a sub- class as Developer (member – projectname). Create object of Developer and display the details of it. [20 Marks]
+OR
+
+
+Q2. Design a servlet to display message as “Welcome IP address of client” to visitor.
+
+
+
+
+
+
+
+
+Slip  16
+
+Q1. Define a class MyNumber having one private integer data member. Write a parameterized constructor to initialize to a value. Write isEven() to check given number is even or not. Use command line argument to pass a value to the object. [10 Marks]
+
+  
+
+public class MyNumber {
+    private int number;
+
+    public MyNumber(int value) {
+        this.number = value;
+    }
+
+    public boolean isEven() {
+        return number % 2 == 0;
+    }
+
+    public static void main(String[] args) {
+        if (args.length < 1) {
+            System.out.println("Please provide a number as a command line argument.");
+            return;
+        }
+
+        try {
+            int value = Integer.parseInt(args[0]);
+            MyNumber myNumber = new MyNumber(value);
+
+            if (myNumber.isEven()) {
+                System.out.println(value + " is an even number.");
+            } else {
+                System.out.println(value + " is an odd number.");
+            }
+        } catch (NumberFormatException e) {
+            System.out.println("Invalid input. Please provide a valid integer.");
+        }
+    }
+}
+
+
+
+Q2. Write a program to create a super class Employee (members – name, salary). Derive a sub- class Programmer (member – proglanguage). Create object of Programmer and display the details of it. [20 Marks]
+
+
+     class Employee {
+    protected String name;
+    protected double salary;
+
+    // Constructor
+    public Employee(String name, double salary) {
+        this.name = name;
+        this.salary = salary;
+    }
+
+    // Method to display employee details
+    public void display() {
+        System.out.println("Name: " + name);
+        System.out.println("Salary: " + salary);
+    }
+}
+
+
+
+class Programmer extends Employee {
+    private String proglanguage;
+
+    // Constructor
+    public Programmer(String name, double salary, String proglanguage) {
+        super(name, salary);  // Call the constructor of the superclass
+        this.proglanguage = proglanguage;
+    }
+
+    // Method to display programmer details
+    @Override
+    public void display() {
+        super.display();  // Call the display method of Employee
+        System.out.println("Programming Language: " + proglanguage);
+    }
+}
+
+
+
+public class Main {
+    public static void main(String[] args) {
+        Programmer programmer = new Programmer("Alice", 75000, "Java");
+        programmer.display();
+    }
+}
+  
+
+
+Q2. Write a JDBC program to update number_of_students of “BCA Science” to 1000. Create a table Course (Code,name, department,number_of_students) in PostgreSQL database. Insert values in the table.
+
+
+
+
+
+
+Slip   17
+
+
+Q1. Define a class MyNumber having one private integer data member. Write a parameterized constructor to initialize to a value. Write isOdd() to check given number is odd or not. Use command line argument to pass a value to the object. [10 Marks]
+
+public class MyNumber {
+    private int number;
+
+    // Parameterized constructor
+    public MyNumber(int number) {
+        this.number = number;
+    }
+
+    // Method to check if the number is odd
+    public boolean isOdd() {
+        return number % 2 != 0;
+    }
+
+    public static void main(String[] args) {
+        if (args.length < 1) {
+            System.out.println("Please provide a number as a command line argument.");
+            return;
+        }
+
+        int value;
+        try {
+            value = Integer.parseInt(args[0]);
+        } catch (NumberFormatException e) {
+            System.out.println("Please enter a valid integer.");
+            return;
+        }
+
+        MyNumber myNumber = new MyNumber(value);
+        if (myNumber.isOdd()) {
+            System.out.println(value + " is an odd number.");
+        } else {
+            System.out.println(value + " is not an odd number.");
+        }
+    }
+}
+// run on cmd
+
+
+Q2. Define a class Student with attributes rollno and name. Define default and parameterized constructor. Keep the count of Objects created. Create objects using parameterized constructor and Display the object count after each object is created. [20 Marks]
+
+
+public class Student {
+    private int rollno;
+    private String name;
+    private static int count = 0;
+
+    // Default constructor
+    public Student() {
+        this.rollno = 0;
+        this.name = "Unknown";
+        count++;
+    }
+
+    // Parameterized constructor
+    public Student(int rollno, String name) {
+        this.rollno = rollno;
+        this.name = name;
+        count++;
+        System.out.println("Student created: Roll No: " + rollno + ", Name: " + name);
+        System.out.println("Total Students Created: " + count);
+    }
+
+    // Method to display student details
+    public void display() {
+        System.out.println("Roll No: " + rollno + ", Name: " + name);
+    }
+
+    // Method to get the count of students
+    public static int getCount() {
+        return count;
+    }
+
+    public static void main(String[] args) {
+        Student student1 = new Student(101, "Alice");
+        student1.display();
+
+        Student student2 = new Student(102, "Bob");
+        student2.display();
+
+        Student student3 = new Student(103, "Charlie");
+        student3.display();
+    }
+}
+
+
+
+
+
+Q2. Write a JSP program to perform Arithmetic operations such as Addition and Subtraction. Design a HTML to accept two numbers in text box and radio buttons to display operations. On submit display result as per the selected operation on next page using JSP.
+
+
+
+
+
+
+Slip  18
+
+
+Q1. Write a program to print the factors of a number. Accept a number using command line argument. [10 Marks]
+
+public class PrintFactors {
+    public static void main(String[] args) {
+        if (args.length < 1) {
+            System.out.println("Please provide a number as a command line argument.");
+            return;
+        }
+
+        int number;
+        try {
+            number = Integer.parseInt(args[0]);
+        } catch (NumberFormatException e) {
+            System.out.println("Please enter a valid integer.");
+            return;
+        }
+
+        System.out.println("Factors of " + number + " are:");
+        for (int i = 1; i <= number; i++) {
+            if (number % i == 0) {
+                System.out.println(i);
+            }
+        }
+    }
+}
+
+// program  run on cmd
+
+
+
+Q2. Write a program to read the contents of “abc.txt” file. Display the contents of file in uppercase as output. [20 Marks]
+
+
+
+OR
+Q2. Write a program to design following screen using swing components New user register.
+
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+public class NewUserRegister {
+    public static void main(String[] args) {
+        JFrame frame = new JFrame("New User Register");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(400, 300);
+        frame.setLayout(new GridLayout(4, 2));
+
+        JLabel usernameLabel = new JLabel("Username:");
+        JTextField usernameField = new JTextField();
+
+        JLabel passwordLabel = new JLabel("Password:");
+        JPasswordField passwordField = new JPasswordField();
+
+        JLabel emailLabel = new JLabel("Email:");
+        JTextField emailField = new JTextField();
+
+        JButton registerButton = new JButton("Register");
+        registerButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String username = usernameField.getText();
+                String password = new String(passwordField.getPassword());
+                String email = emailField.getText();
+                JOptionPane.showMessageDialog(frame, "Registered Successfully!\nUsername: " + username + "\nEmail: " + email);
+            }
+        });
+
+        frame.add(usernameLabel);
+        frame.add(usernameField);
+        frame.add(passwordLabel);
+        frame.add(passwordField);
+        frame.add(emailLabel);
+        frame.add(emailField);
+        frame.add(registerButton);
+
+        frame.setVisible(true);
+    }
+}
+
+
+
+
+Slip  19
+
+
+
+
+
+Q1. Write a program to accept the 'n' different numbers from user and store it in array. Display maximum number from an array. [10 Marks]
+
+
+import java.util.Scanner;
+
+public class MaxNumberFromArray {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.print("Enter the number of elements: ");
+        int n = scanner.nextInt();
+
+        int[] numbers = new int[n];
+
+        System.out.println("Enter " + n + " different numbers:");
+        for (int i = 0; i < n; i++) {
+            numbers[i] = scanner.nextInt();
+        }
+
+        int maxNumber = numbers[0];
+        for (int i = 1; i < n; i++) {
+            if (numbers[i] > maxNumber) {
+                maxNumber = numbers[i];
+            }
+        }
+
+        System.out.println("The maximum number is: " + maxNumber);
+    }
+}
+
+
+
+
+Q2. Create an abstract class “order” having members id, description. Create a subclass “Purchase Order” having member as customer name. Define methods accept and display. Create 3 objects each of Purchase Order. Accept and display the details.
+[20 Marks]
+
+
+abstract class Order {
+    protected int id;
+    protected String description;
+
+    abstract void accept();
+    abstract void display();
+}
+
+
+
+
+import java.util.Scanner;
+
+class PurchaseOrder extends Order {
+    private String customerName;
+
+    @Override
+    void accept() {
+        Scanner scanner = new Scanner(System.in);
+        
+        System.out.print("Enter Order ID: ");
+        this.id = scanner.nextInt();
+        scanner.nextLine();  // Consume newline
+
+        System.out.print("Enter Description: ");
+        this.description = scanner.nextLine();
+
+        System.out.print("Enter Customer Name: ");
+        this.customerName = scanner.nextLine();
+    }
+
+    @Override
+    void display() {
+        System.out.println("Order ID: " + id);
+        System.out.println("Description: " + description);
+        System.out.println("Customer Name: " + customerName);
+        System.out.println();
+    }
+}
+
+
+
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+        PurchaseOrder[] orders = new PurchaseOrder[3];
+        
+        for (int i = 0; i < 3; i++) {
+            System.out.println("Enter details for Purchase Order " + (i + 1) + ":");
+            orders[i] = new PurchaseOrder();
+            orders[i].accept();
+        }
+
+        System.out.println("\nDisplaying Purchase Orders:");
+        for (PurchaseOrder order : orders) {
+            order.display();
+        }
+    }
+}
+
+
+
+
+Q2. Write a servlet program to display current date and time of server.
+
+
+
+
+
+Slip  20
+
+
+
+
+
+Q1. Write a program to accept 3 numbers using command line argument. Sort and display the numbers. [10 Marks]
+
+
+public class SortNumbers {
+    public static void main(String[] args) {
+        if (args.length < 3) {
+            System.out.println("Please provide exactly 3 numbers as command line arguments.");
+            return;
+        }
+
+        int[] numbers = new int[3];
+
+        try {
+            for (int i = 0; i < 3; i++) {
+                numbers[i] = Integer.parseInt(args[i]);
+            }
+        } catch (NumberFormatException e) {
+            System.out.println("Please enter valid integers.");
+            return;
+        }
+
+        // Sorting the numbers using a simple bubble sort
+        for (int i = 0; i < numbers.length - 1; i++) {
+            for (int j = 0; j < numbers.length - 1 - i; j++) {
+                if (numbers[j] > numbers[j + 1]) {
+                    // Swap
+                    int temp = numbers[j];
+                    numbers[j] = numbers[j + 1];
+                    numbers[j + 1] = temp;
+                }
+            }
+        }
+
+        System.out.println("Sorted numbers:");
+        for (int number : numbers) {
+            System.out.println(number);
+        }
+    }
+}
+
+
+
+Q2. Create an employee class (id,name,deptname,salary). Define a default and parameterized constructor. Use ‘this’ keyword to initialize instance variables. Keep a count of objects created. Create objects using parameterized constructor and display the object count after each object is created. Also display the contents of each object. [20 Marks]
+
+
+class Employee {
+    private int id;
+    private String name;
+    private String deptName;
+    private double salary;
+    private static int count = 0;
+
+    public Employee() {
+        count++;
+    }
+
+    public Employee(int id, String name, String deptName, double salary) {
+        this.id = id;
+        this.name = name;
+        this.deptName = deptName;
+        this.salary = salary;
+        count++;
+    }
+
+    public void display() {
+        System.out.println("Employee ID: " + id);
+        System.out.println("Name: " + name);
+        System.out.println("Department: " + deptName);
+        System.out.println("Salary: " + salary);
+        System.out.println();
+    }
+
+    public static int getCount() {
+        return count;
+    }
+}
+
+
+
+
+
+
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        Employee[] employees = new Employee[3];
+
+        for (int i = 0; i < 3; i++) {
+            System.out.println("Enter details for Employee " + (i + 1) + ":");
+            System.out.print("ID: ");
+            int id = scanner.nextInt();
+            scanner.nextLine(); // Consume newline
+
+            System.out.print("Name: ");
+            String name = scanner.nextLine();
+
+            System.out.print("Department Name: ");
+            String deptName = scanner.nextLine();
+
+            System.out.print("Salary: ");
+            double salary = scanner.nextDouble();
+
+            employees[i] = new Employee(id, name, deptName, salary);
+            System.out.println("Employee Count: " + Employee.getCount());
+        }
+
+        System.out.println("\nEmployee Details:");
+        for (Employee employee : employees) {
+            employee.display();
+        }
+    }
+}
+
+
+
+OR
+Q2. Write a JSP program to perform Arithmetic operations such as Multiplication and Divison. Design a HTML to accept two numbers in text box and radio buttons to display operations. On submit display result as per the selected operation on next page using JSP.
